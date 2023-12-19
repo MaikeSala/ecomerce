@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
+import { Product } from '../models/Product';
 
 export const pong = (req: Request, res: Response) => {
     res.json({ping: true});
@@ -31,4 +32,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     res.json({ status: false });
+}
+
+export const list = async(req:Request, res: Response) => {
+    let users = await User.findAll();
+    let produto = await Product.findAll();
+
+console.log("Usuarios:",JSON.stringify(users));
+console.log("Produto:",JSON.stringify(produto));
 }
