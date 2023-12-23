@@ -3,19 +3,24 @@ import path from 'path';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import apiRoutes from './routes/api';
+import { mongoConnect } from './instances/mongo';
 
 dotenv.config();
+
+mongoConnect();
 
 const server = express();
 
 server.use(cors());
 
+server.use(express.json());
+
+server.set('views', path.join(__dirname,'views'));
+
 server.use(express.static(path.join(__dirname, '../public')));
 server.use(express.urlencoded({ extended: true }));
 
-server.get('/ping', (req: Request, res: Response) => res.json({ pong: true }));
-
-server.use(apiRoutes);
+server.use('/', apiRoutes);
 
 server.use((req: Request, res: Response) => {
     res.status(404);

@@ -18,8 +18,8 @@ router.get('/produtos/list', productController.getList);
 router.get('/produtos/item', productController.getItem);
 router.get('/produtos/:id', productController.editAction);
 
-router.get('/carrinho/list', userController.carrinhoList);
-router.post('/carrinho/add', userController.carrinhoAdd);
+router.get('/carrinho/list/:id', userController.carrinhoList);
+router.post('/carrinho/add/:id', userController.carrinhoAdd);
 
 router.get('/checkout', userController.checkout);
 router.post('/checkout/post', userController.checkoutPost);

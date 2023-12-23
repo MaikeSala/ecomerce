@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { User } from '../models/User';
-import { Product } from '../models/Product';
+import { UserModel } from '../models/User';
+import { ProductModel } from '../models/Product';
 
 export const contatoInfo = async (req:Request, res: Response) => {
     

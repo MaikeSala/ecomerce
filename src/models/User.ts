@@ -1,46 +1,23 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../instances/pg';
+import mongoose, {Document, Schema} from "mongoose";
 
-export interface UserInstance extends Model {
-    id: number;
-    nome_completo: string;
+interface User extends Document {
+    name: string;
     email: string;
     password: string;
     telefone: string;
     cidade: string;
-    prefComunicacao: string;
+    prefComunicacao: boolean;
     dataNascimento: string;
 }
 
-export const User = sequelize.define<UserInstance>('User', {
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER
-    },
-    nome_completo: {
-        type: DataTypes.STRING,
-    },
-    email: {
-        type: DataTypes.STRING,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING
-    },
-    telefone: {
-        type: DataTypes.STRING
-    },
-    cidade: {
-        type: DataTypes.STRING
-    },
-    prefComunicacao: {
-        type: DataTypes.STRING
-    },
-    dataNascimento: {
-        type: DataTypes.STRING
-    }
-}, {
-    tableName: 'users',
-    timestamps: false
+const userSchema = new Schema<User>({
+    name: {type: String, required: true},
+    email: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
+    telefone: {type: String, required: true},
+    cidade: {type: String, required: true},
+    prefComunicacao: {type: Boolean},
+    dataNascimento: {type: String}
 });
+
+export const UserModel = mongoose.model<User>('User', userSchema);

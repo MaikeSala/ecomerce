@@ -1,61 +1,31 @@
-import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../instances/pg';
+import mongoose, {Document, Schema} from "mongoose";
 
-export interface ProdutctInstance extends Model {
-    id: number;
-    nome: string;
+interface Product extends Document {
+    name: string;
     descricao: string;
     preco: number;
     quantidade: number;
     categoria: string;
     fabricante: string;
     data_criacao: string;
-    imagem: string,
-    promocao: boolean,
-    destaque: boolean,
-    avalicao_media: number
+    imagem: string;
+    promocao: boolean;
+    destaque: boolean;
+    avalicao_media: number;
 }
 
-export const Product = sequelize.define<ProdutctInstance>('Product', {
-    id: {
-        primaryKey: true,
-        autoIncrement: true,
-        type: DataTypes.INTEGER
-    },
-    nome: {
-        type: DataTypes.STRING,
-    },
-    descricao: {
-        type: DataTypes.STRING,
-    },
-    preco: {
-        type: DataTypes.NUMBER
-    },
-    quantidade: {
-        type: DataTypes.NUMBER
-    },
-    categoria: {
-        type: DataTypes.STRING
-    },
-    fabricante: {
-        type: DataTypes.STRING
-    },
-    data_criacao: {
-        type: DataTypes.STRING
-    },
-    imagem: {
-        type: DataTypes.STRING
-    },
-    promocao: {
-        type: DataTypes.BOOLEAN
-    },
-    destaque: {
-        type: DataTypes.BOOLEAN
-    },
-    avaliacao_media: {
-        type: DataTypes.NUMBER
-    }
-}, {
-    tableName: 'produto',
-    timestamps: false
+const productSchema = new Schema<Product>({
+    name: {type: String, required: true},
+    descricao: {type: String},
+    preco: {type: Number, required: true},
+    quantidade: {type: Number, required: true},
+    categoria: {type: String},
+    fabricante: {type: String},
+    data_criacao: {type: String},
+    imagem: {type: String},
+    promocao: {type: Boolean},
+    destaque: {type: Boolean},
+    avalicao_media: {type: Number},
 });
+
+export const ProductModel = mongoose.model<Product>('Product',productSchema);

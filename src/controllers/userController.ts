@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { User } from '../models/User';
-import { Product } from '../models/Product';
+import { UserModel } from '../models/User';
+import { ProductModel } from '../models/Product';
 
-export const signin = async (req:Request, res: Response) => {
+export const signup = async (req:Request, res: Response) => {
     
 }
 
-export const signup = async (req:Request, res: Response) => {
+export const signin = async (req:Request, res: Response) => {
     
 }
 
