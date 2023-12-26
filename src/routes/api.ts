@@ -3,36 +3,37 @@ import { Router } from 'express';
 import * as productController from '../controllers/productController';
 import * as userController from '../controllers/userController';
 import * as infoController from '../controllers/infoController';
+import * as authController from '../controllers/authController';
+import * as Auth from '../middlewares/Auth';
+import * as AuthValidator from '../validators/AuthValidator';
+
 
 const router = Router();
 
-router.get('/', productController.promocaoDestaque);
+router.get('/',productController.promocaoDestaque);
 
-router.post('/user/signin',userController.signin);
-router.post('/user/signup',userController.signup);
-router.put('/user/att',userController.attInfo);
-router.get('/user/me',userController.getInfo);
+router.post('/user/signin', AuthValidator.signin, authController.signin);
+router.post('/user/signup', AuthValidator.signup, authController.signup);
+router.put('/user/me', Auth.privates,userController.attInfo);
+router.get('/user/me', Auth.privates,userController.getInfo);
 
-router.get('/produtos/add', productController.addProduct);
+router.post('/produtos/add', Auth.privates, productController.addProduct);
 router.get('/produtos/list', productController.getList);
 router.get('/produtos/item', productController.getItem);
 router.get('/produtos/:id', productController.editAction);
 
-router.get('/carrinho/list/:id', userController.carrinhoList);
-router.post('/carrinho/add/:id', userController.carrinhoAdd);
+router.get('/carrinho/list/:id', Auth.privates, userController.carrinhoList);
+router.post('/carrinho/add/:id', Auth.privates ,userController.carrinhoAdd);
 
-router.get('/checkout', userController.checkout);
-router.post('/checkout/post', userController.checkoutPost);
+router.get('/checkout', Auth.privates, userController.checkout);
+router.post('/checkout/post', Auth.privates, userController.checkoutPost);
 
-router.get('/pedidos', userController.pedidos);
+router.get('/pedidos', Auth.privates, userController.pedidos);
 
 router.get('/contato/info', infoController.contatoInfo);
 router.post('/contato/add', infoController.contatoPost);
 
 router.get('/sobre', infoController.sobre);
 router.get('/politicas', infoController.politicas);
-
-
-router.put('/attperfil')
 
 export default router;

@@ -12,6 +12,7 @@ interface Product extends Document {
     promocao: boolean;
     destaque: boolean;
     avalicao_media: number;
+    views: number;
 }
 
 const productSchema = new Schema<Product>({
@@ -26,6 +27,7 @@ const productSchema = new Schema<Product>({
     promocao: {type: Boolean},
     destaque: {type: Boolean},
     avalicao_media: {type: Number},
+    views: {type: Number},
 });
 
 export const ProductModel = mongoose.model<Product>('Product',productSchema);
