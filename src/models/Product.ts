@@ -8,6 +8,7 @@ interface Product extends Document {
     categoria: string;
     fabricante: string;
     data_criacao: string;
+    id_user: string;
     imagem: string;
     promocao: boolean;
     destaque: boolean;
@@ -23,6 +24,7 @@ const productSchema = new Schema<Product>({
     categoria: {type: String},
     fabricante: {type: String},
     data_criacao: {type: String},
+    id_user: {type: String},
     imagem: {type: String},
     promocao: {type: Boolean},
     destaque: {type: Boolean},

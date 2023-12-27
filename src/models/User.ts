@@ -6,7 +6,11 @@ interface User extends Document {
     password: string;
     token: string;
     telefone: string;
-    endereco: object;
+    endereco: {
+        cidade: string,
+        rua: string,
+        numero: string
+    };
     prefComunicacao: boolean;
     dataNascimento: string;
 }
@@ -17,7 +21,11 @@ const userSchema = new Schema<User>({
     password: {type: String, required: true},
     token: {type: String, require: true},
     telefone: {type: String, required: true},
-    endereco: {type: Object},
+    endereco: {
+        cidade: {type: String},
+        rua: {type: String},
+        numero: {type: String},
+    },
     prefComunicacao: {type: Boolean},
     dataNascimento: {type: String}
 });
