@@ -6,7 +6,7 @@ import * as infoController from '../controllers/infoController';
 import * as authController from '../controllers/authController';
 import * as Auth from '../middlewares/Auth';
 import * as AuthValidator from '../validators/AuthValidator';
-
+import * as UserValidator from '../validators/UserValidator';
 
 const router = Router();
 
@@ -14,8 +14,8 @@ router.get('/',productController.promocaoDestaque);
 
 router.post('/user/signin', AuthValidator.signin, authController.signin);
 router.post('/user/signup', AuthValidator.signup, authController.signup);
-router.put('/user/me', Auth.privates,userController.attInfo);
 router.get('/user/me', Auth.privates,userController.getInfo);
+router.put('/user/me', UserValidator.editAction , Auth.privates, userController.attInfo);
 
 router.post('/produtos/add', Auth.privates, productController.addProduct);
 router.get('/produtos/list', productController.getList);
