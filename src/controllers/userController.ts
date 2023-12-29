@@ -106,27 +106,25 @@ export const carrinhoList = async (req:Request, res: Response) => {
     }
 
     // Busca o carrinho associado ao id do usuário
-    const cars = await CarModel.find({userId: user?.id});
-  // Preenche um array com os ids e as quantidades dos produtos do carrinho   
-  const items: { productId: string; quantidade: number }[] = cars.length > 0 ? cars[0].itens : [];
-  console.log("items:", items);
+    const car = await CarModel.findOne({userId: user?.id});
 
- 
-  const products: { product: Product; quantidade: number }[] = [];
+    const items: { productId: string; quantidade: number }[] = car?.itens || [];
 
-  // Procura com base nos items (productId e quantidade) os produtos e os insere no array products
-  for (const item of items) {
-      const product = await ProductModel.findById(item.productId).lean();
-      if (product) {
-          products.push({
-              product: product as Product,
-              quantidade: item.quantidade  // Adiciona a quantidade ao objeto do produto
-          });
-      } else {
-          res.json({ error: 'Produto não encontrado' });
-          return;
-      }
-  }
+    const products: { product: Product; quantidade: number }[] = [];
+
+    // Procura com base no productId os produtos e os insere no array products
+    for (const item of items) {
+        const product = await ProductModel.findById(item.productId).lean();
+        if (product) {
+            products.push({
+            product: product as Product,
+            quantidade: item.quantidade 
+            });
+        } else {
+            res.json({ error: 'Produto não encontrado' });
+            return;
+        }
+    }
     
     res.json({
         products
@@ -135,6 +133,42 @@ export const carrinhoList = async (req:Request, res: Response) => {
 
 export const carrinhoAdd = async (req:Request, res: Response) => {
     
+    let token = req.query.token;
+    let productId = req.body.produto
+
+    // Verifica se o produto existe no BD
+    const product = await ProductModel.find({id: productId});
+    if(!product){ 
+        res.json({error: 'Produto não encontrado'})
+        return;
+    }
+
+    // Busca as infos do usuario utilizando o token
+    const user = await UserModel.findOne({token});
+
+    // Busca o carrinho do usuario
+    const car = await CarModel.findOne({userId: user?.id});
+    if(!car) {
+        res.json({error: 'Carrinho não encontrado'});
+        return;
+    }
+
+    // Verifica se o produto ja esta no carrinho
+    const items: { productId: string; quantidade: number }[] = car?.itens || [];
+    const item = car.itens.find(item => item.productId === productId);
+
+    // Adiciona os produtos no carrinho
+    if(item) {
+        item.quantidade += 1;
+        await car.save();
+    } else {
+        const newItem = {productId, quantidade: 1};
+        car.itens.push(newItem);
+        await car.save();
+    }
+
+    res.json({});
+
 }
 
 export const checkout = async (req:Request, res: Response) => {
