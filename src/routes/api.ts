@@ -19,6 +19,7 @@ router.put('/user/me', UserValidator.editAction , Auth.privates, userController.
 
 router.get('/carrinho/list/', Auth.privates, userController.carrinhoList);
 router.post('/carrinho/add/', Auth.privates ,userController.carrinhoAdd);
+router.post('/carrinho/delete/', Auth.privates ,userController.carrinhoDelete);
 
 router.post('/produtos/add', Auth.privates, productController.addProduct);
 router.get('/produtos/list', productController.getList);

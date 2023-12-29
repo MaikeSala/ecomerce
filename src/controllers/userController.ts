@@ -171,6 +171,55 @@ export const carrinhoAdd = async (req:Request, res: Response) => {
 
 }
 
+export const carrinhoDelete = async(req:Request, res: Response) => {
+    
+    let token = req.query.token;
+    let productId = req.body.produto;
+
+    // Verifica se o produto existe no BD
+    const product = await ProductModel.find({id: productId});
+    if(!product){ 
+        res.json({error: 'Produto não encontrado'})
+        return;
+    }
+
+    // Busca as infos do usuario utilizando o token
+    const user = await UserModel.findOne({token});
+    
+    // Busca o carrinho do usuario
+    const car = await CarModel.findOne({userId: user?.id});
+    if(!car) {
+        res.json({error: 'Carrinho não encontrado'});
+        return;
+    }
+
+    // Verifica se o produto ja esta no carrinho
+    const items: { productId: string; quantidade: number }[] = car?.itens || [];
+    const item = car.itens.find(item => item.productId === productId);
+
+    /* Verifica se existe apenas um produto no carrinho, se sim, ele deleta,
+    se tiver mais de 1, apenas diminui quantidade */
+    if(item){
+        if(item?.quantidade === 1) {
+            car.itens = car.itens.filter(item => item.productId !== productId);
+        } else {
+            if(item.quantidade !== undefined) {
+                item.quantidade -= 1;
+            } else {
+                console.log('Quantidade do item é undefined');
+            }
+        }
+        await car.save()
+
+    } else {
+        res.json({error: 'Produto não encontrado no carrinho'});
+        return;
+    }
+
+    res.json({});
+
+}
+
 export const checkout = async (req:Request, res: Response) => {
     
 }
