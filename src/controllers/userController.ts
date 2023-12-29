@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import { UserModel, User } from '../models/User';
-import { ProductModel } from '../models/Product';
+import { ProductModel, Product } from '../models/Product';
 import { CategoryModel } from '../models/Category';
+import { CarModel } from '../models/Car';
 import { validationResult, matchedData } from 'express-validator';
 import bcrypt from 'bcrypt';
+
 
 
 export const getInfo = async (req:Request, res: Response) => {
@@ -52,11 +54,11 @@ export const attInfo = async (req:Request, res: Response) => {
     const data = matchedData(req);
 
     let updates: Partial<User> = {};
-
+    // Preenche updades com os dados modificados
     if(data.name) {
         updates.name = data.name
     }
-
+    // Pesuisa para ver se email já existe no BD
     if(data.email) {
         const emailCheck = await UserModel.findOne({email: data.email});
         if(emailCheck) {
@@ -77,7 +79,6 @@ export const attInfo = async (req:Request, res: Response) => {
             numero: data.endereco.numero,
         };
     }
-    console.log(data.endereco, data.name);
 
     if(data.prefComunicacao) {
         updates.prefComunicacao = data.prefComunicacao
@@ -86,8 +87,7 @@ export const attInfo = async (req:Request, res: Response) => {
     if(data.dataNascimento) {
         updates.dataNascimento = data.dataNascimento
     }
-
-
+    //Att os dados do BD
     await UserModel.findOneAndUpdate({token: data.token},{$set: updates});
 
 
@@ -96,6 +96,41 @@ export const attInfo = async (req:Request, res: Response) => {
 
 export const carrinhoList = async (req:Request, res: Response) => {
     
+    let token = req.query.token;
+    
+    //Busca id do usuario através do token de login
+    const user = await UserModel.findOne({token});
+    if(!user) {
+        res.json({error: 'Usuário não encontrado'});
+        return;
+    }
+
+    // Busca o carrinho associado ao id do usuário
+    const cars = await CarModel.find({userId: user?.id});
+  // Preenche um array com os ids e as quantidades dos produtos do carrinho   
+  const items: { productId: string; quantidade: number }[] = cars.length > 0 ? cars[0].itens : [];
+  console.log("items:", items);
+
+ 
+  const products: { product: Product; quantidade: number }[] = [];
+
+  // Procura com base nos items (productId e quantidade) os produtos e os insere no array products
+  for (const item of items) {
+      const product = await ProductModel.findById(item.productId).lean();
+      if (product) {
+          products.push({
+              product: product as Product,
+              quantidade: item.quantidade  // Adiciona a quantidade ao objeto do produto
+          });
+      } else {
+          res.json({ error: 'Produto não encontrado' });
+          return;
+      }
+  }
+    
+    res.json({
+        products
+    });
 }
 
 export const carrinhoAdd = async (req:Request, res: Response) => {

@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import * as productController from '../controllers/productController';
-import * as userController from '../controllers/userController';
-import * as infoController from '../controllers/infoController';
-import * as authController from '../controllers/authController';
+import * as productController from '../controllers/ProductController';
+import * as userController from '../controllers/UserController';
+import * as infoController from '../controllers/InfoController';
+import * as authController from '../controllers/AuthController';
 import * as Auth from '../middlewares/Auth';
 import * as AuthValidator from '../validators/AuthValidator';
 import * as UserValidator from '../validators/UserValidator';
@@ -17,13 +17,13 @@ router.post('/user/signup', AuthValidator.signup, authController.signup);
 router.get('/user/me', Auth.privates,userController.getInfo);
 router.put('/user/me', UserValidator.editAction , Auth.privates, userController.attInfo);
 
+router.get('/carrinho/list/', Auth.privates, userController.carrinhoList);
+router.post('/carrinho/add/', Auth.privates ,userController.carrinhoAdd);
+
 router.post('/produtos/add', Auth.privates, productController.addProduct);
 router.get('/produtos/list', productController.getList);
 router.get('/produtos/item', productController.getItem);
 router.get('/produtos/:id', productController.editAction);
-
-router.get('/carrinho/list/:id', Auth.privates, userController.carrinhoList);
-router.post('/carrinho/add/:id', Auth.privates ,userController.carrinhoAdd);
 
 router.get('/checkout', Auth.privates, userController.checkout);
 router.post('/checkout/post', Auth.privates, userController.checkoutPost);
