@@ -7,7 +7,6 @@ import { validationResult, matchedData } from 'express-validator';
 import bcrypt from 'bcrypt';
 
 
-
 export const getInfo = async (req:Request, res: Response) => {
     
     let token = req.query.token;
@@ -133,7 +132,7 @@ export const carrinhoList = async (req:Request, res: Response) => {
 
 export const carrinhoAdd = async (req:Request, res: Response) => {
     
-    let token = req.query.token;
+    let token = req.body.token;
     let productId = req.body.produto
 
     // Verifica se o produto existe no BD
@@ -173,7 +172,7 @@ export const carrinhoAdd = async (req:Request, res: Response) => {
 
 export const carrinhoDelete = async(req:Request, res: Response) => {
     
-    let token = req.query.token;
+    let token = req.body.token;
     let productId = req.body.produto;
 
     // Verifica se o produto existe no BD
@@ -220,14 +219,14 @@ export const carrinhoDelete = async(req:Request, res: Response) => {
 
 }
 
+export const pedidos = async (req:Request, res: Response) => {
+    
+}
+
 export const checkout = async (req:Request, res: Response) => {
     
 }
 
 export const checkoutPost = async (req:Request, res: Response) => {
-    
-}
-
-export const pedidos = async (req:Request, res: Response) => {
     
 }

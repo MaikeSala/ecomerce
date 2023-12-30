@@ -26,10 +26,10 @@ router.get('/produtos/list', productController.getList);
 router.get('/produtos/item', productController.getItem);
 router.get('/produtos/:id', productController.editAction);
 
+router.get('/pedidos', Auth.privates, userController.pedidos);
+
 router.get('/checkout', Auth.privates, userController.checkout);
 router.post('/checkout/post', Auth.privates, userController.checkoutPost);
-
-router.get('/pedidos', Auth.privates, userController.pedidos);
 
 router.get('/contato/info', infoController.contatoInfo);
 router.post('/contato/add', infoController.contatoPost);
