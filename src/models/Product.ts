@@ -5,7 +5,7 @@ export interface Product extends Document {
     descricao: string;
     preco: number;
     quantidade: number;
-    categoria: string;
+    categoria: String;
     fabricante: string;
     data_criacao: string;
     id_user: string;
@@ -22,7 +22,7 @@ const productSchema = new Schema<Product>({
     descricao: {type: String},
     preco: {type: Number, required: true},
     quantidade: {type: Number, required: true},
-    categoria: {type: String},
+    categoria: {type: String, ref:'category'},
     fabricante: {type: String},
     data_criacao: {type: String},
     id_user: {type: String},

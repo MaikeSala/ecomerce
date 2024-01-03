@@ -7,11 +7,12 @@ import * as Auth from '../middlewares/Auth';
 import * as AuthValidator from '../validators/AuthValidator';
 import * as UserValidator from '../validators/UserValidator';
 import * as ProductValidator from '../validators/ProductValidator';
-import { storage } from '../config/multercConfig';
+import { storage, storageCat } from '../config/multercConfig';
 import multer from 'multer';
 
 const router = Router();
 const upload = multer({ storage: storage });
+const uploadCat = multer({ storage: storageCat});
 
 router.get('/',ProductController.promocaoDestaque);
 
@@ -28,10 +29,11 @@ router.post('/produtos/add', ProductValidator.product ,Auth.privates,ProductCont
 router.post('/produtos/upload', ProductValidator.upload , Auth.privates ,upload.single("imagem"), ProductController.upload);
 router.get('/produtos/list', ProductController.getList);
 router.get('/produtos/item', ProductController.getItem);
-router.get('/produtos/:id', ProductController.editAction);
+router.post('/produtos/:id', ProductController.editAction);
 
 router.get('/category/list',ProductController.getCategory);
 router.post('/category/add',ProductController.addCatefory);
+router.post('/category/upload',Auth.privates, uploadCat.single("imagem"), ProductController.uploadCategory);
 
 router.get('/checkout', Auth.privates, UserController.checkout);
 router.post('/checkout/post', Auth.privates, UserController.checkoutPost);
