@@ -14,6 +14,7 @@ export interface Product extends Document {
     destaque: boolean;
     avalicao_media: number;
     views: number;
+    status: boolean;
 }
 
 const productSchema = new Schema<Product>({
@@ -30,6 +31,7 @@ const productSchema = new Schema<Product>({
     destaque: {type: Boolean},
     avalicao_media: {type: Number},
     views: {type: Number},
+    status: {type: Boolean},
 });
 
 export const ProductModel = mongoose.model<Product>('Product',productSchema);

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/User';
 import { ProductModel, Product } from '../models/Product';
-import multer from 'multer';
 import { validationResult, matchedData } from 'express-validator';
+import { CategoryModel } from '../models/Category'
+import { product } from '../validators/ProductValidator';
 
 export const promocaoDestaque = async (req:Request, res: Response) => {
 //listar produtos
@@ -18,7 +19,6 @@ export const addProduct = async (req:Request, res: Response) => {
         return;
     }
     const dat = matchedData(req);
-
 
     let token = req.body.token;
     let data: Product = req.body;
@@ -78,12 +78,66 @@ export const upload = async (req:Request, res: Response) => {
     return res.json({});
 }
 
-export const getList = async (req:Request, res: Response) => {
-    
+export const getList = async (req: Request, res: Response) => {
+    const { sort = 'asc', offset = 0, limit = 20, q, cat, views} = req.query;
+    let filters: any = {status: true};
+    let total: number = 0;
+
+    // Usa os infos da query para aplicar os filtros
+    if(q) {
+        filters.name = {$regex: q, $options: 'i'};
+    }
+
+    /* if(cat) {
+        const c = await CategoryModel.findOne({slug: cat}).exec();
+        if(c) {
+            filters.categoria = c.id.toString();
+        } 
+    } */
+
+    if(views) {
+        const v = await ProductModel.findOne({views}).exec();
+        if(v) {
+            filters.views = v.id.toString();
+        }
+    }
+
+    //Busca utilizando os filtros
+    const productsTotal = await ProductModel.find(filters).exec();
+    total = productsTotal.length;
+
+    const productData = await ProductModel.find(filters)
+        .sort({data_criacao: (sort == 'desc' ?-1:1)})
+        .skip(+offset)
+        .limit(+limit)
+        .exec();
+
+    const products: Partial<Product>[] = productData.map(product => ({
+        id: product._id,
+        name: product.name,
+        descricao: product.descricao,
+        preco: product.preco,
+        quantidade: product.quantidade,
+        categoria: product.categoria,
+        fabricante: product.fabricante,
+        data_criacao: product.data_criacao,
+        id_user: product.id_user,
+        promocao: product.promocao,
+        destaque: product.destaque,
+        avaliacao_media: product.avalicao_media,
+        views: product.views,
+        status: product.status,
+        imagem: product.imagem,
+    }));
+
+    res.json({results: products, total});
 }
+
 export const getItem = async (req:Request, res: Response) => {
-    
 }
 export const editAction = async (req:Request, res: Response) => {
-    
+}
+export const getCategory = async (req:Request, res: Response) => {
+}
+export const addCatefory = async (req:Request, res: Response) => {
 }

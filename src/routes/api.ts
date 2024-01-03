@@ -30,15 +30,21 @@ router.get('/produtos/list', ProductController.getList);
 router.get('/produtos/item', ProductController.getItem);
 router.get('/produtos/:id', ProductController.editAction);
 
-router.get('/pedidos', Auth.privates, UserController.pedidos);
+router.get('/category/list',ProductController.getCategory);
+router.post('/category/add',ProductController.addCatefory);
 
 router.get('/checkout', Auth.privates, UserController.checkout);
 router.post('/checkout/post', Auth.privates, UserController.checkoutPost);
 
-router.get('/contato/info', InfoController.contatoInfo);
+router.get('/pedidos', Auth.privates, UserController.pedidos);
+
+router.get('/contato', InfoController.contatoInfo);
 router.post('/contato/add', InfoController.contatoPost);
 
 router.get('/sobre', InfoController.sobre);
+router.post('/sobre/add', InfoController.sobreAdd);
+
 router.get('/politicas', InfoController.politicas);
+router.post('/politicas/add', InfoController.politicasAdd);
 
 export default router;
