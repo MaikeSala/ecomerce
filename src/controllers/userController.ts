@@ -219,14 +219,22 @@ export const carrinhoDelete = async(req:Request, res: Response) => {
 
 }
 
-export const pedidos = async (req:Request, res: Response) => {
-    
-}
-
 export const checkout = async (req:Request, res: Response) => {
-    
+    let token = req.query.token;
+
+    // 1. Busca infos do carrinho para confirmação
+    const user = await UserModel.findOne({token});
+    const car = await CarModel.findOne({userId: user?.id});
+
+    // 2. Processar o pedido e criar um novo pedido no banco de dados.
+    // 3. Atualizar o status do estoque (dependendo da lógica do seu aplicativo).
+    // 5. Processar o pagamento (integração com um serviço de pagamento).
+    // 6. Enviar confirmação ao cliente (por exemplo, enviar um e-mail).
+    // 7. Atualizar o banco de dados (por exemplo, marcar itens do carrinho como comprados).
+    // 8. Responder ao cliente com os detalhes do pedido.
+    res.json({car});
 }
 
-export const checkoutPost = async (req:Request, res: Response) => {
+export const pedidos = async (req:Request, res: Response) => {
     
 }

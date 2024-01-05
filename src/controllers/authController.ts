@@ -2,6 +2,7 @@ import { validationResult, matchedData } from 'express-validator';
 import { Request, Response } from 'express';
 import { UserModel } from '../models/User';
 import bcrypt from 'bcrypt';
+import { CarModel } from '../models/Car';
 
 
 export const signin = async (req:Request, res: Response) => {
@@ -70,6 +71,13 @@ export const signup = async (req:Request, res: Response) => {
         telefone: data.telefone
     });
     await newuser.save();
+
+    const idU = await UserModel.findOne({token});
+    // Inicializando carrinho
+    const newCar = new CarModel({
+        userId: idU?.id,
+    })
+    await newCar.save();
 
     res.json({token});
 
