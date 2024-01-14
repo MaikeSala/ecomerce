@@ -228,7 +228,7 @@ export const checkout = async (req:Request, res: Response) => {
 
     // 2. Processar o pedido e criar um novo pedido no banco de dados
     // 3. Atualizar o status do estoque
-     // 4. Calcular o preço final
+    // 4. Calcular o preço final
     // 5. Processar o pagamento (integração com um serviço de pagamento)
     // 6. Enviar confirmação ao cliente
     // 7. Atualizar o banco de dados 
