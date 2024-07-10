@@ -35,6 +35,8 @@ router.get('/category/list',ProductController.getCategory);
 router.post('/category/add',ProductController.addCatefory);
 router.post('/category/upload',Auth.privates, uploadCat.single("imagem"), ProductController.uploadCategory);
 
+router.get('/produtos/recomendados', ProductController.getRecommendations);
+
 router.post('/checkout', Auth.privates, UserController.checkout);
 
 router.get('/pedidos', Auth.privates, UserController.pedidos);

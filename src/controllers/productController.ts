@@ -3,13 +3,22 @@ import { UserModel } from '../models/User';
 import { ProductModel, Product } from '../models/Product';
 import { validationResult, matchedData } from 'express-validator';
 import { CategoryModel, Category } from '../models/Category'
-import { product } from '../validators/ProductValidator';
+import { generateRecommendations } from '../services/recomendationService';
 
 export const promocaoDestaque = async (req:Request, res: Response) => {
 //listar produtos
     let destaque = await ProductModel.find({destaque: true});
     let promocao = await ProductModel.find({promocao: true});
     res.json({destaque, promocao});
+}
+
+export const getRecommendations = async (req: Request, res: Response) => {
+    try {
+        const recommendations = await generateRecommendations();
+        res.json({ recommendations });
+    } catch (error) {
+        res.status(500).json({ error: "Erro ao gerar recomendações"});
+    }
 }
 
 export const addProduct = async (req:Request, res: Response) => {
